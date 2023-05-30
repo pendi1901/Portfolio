@@ -4,5 +4,9 @@ import tailwind from "@astrojs/tailwind";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind()]
+  meta:{
+    favicon:'../images/Net Access Solutions Logo (2).png',
+  },
+  integrations: [tailwind()],
+  
 });

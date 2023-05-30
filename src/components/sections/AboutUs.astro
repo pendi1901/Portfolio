@@ -9,49 +9,137 @@ import Title from "../shared/Title.astro";
 <section id="about-us">
     <div class="text-center max-w-3xl mx-auto space-y-4">
         <h1 style="font-size: 2.25rem; line-height: 1.2; font-weight: normal; color: white;">
-           Work Experience
+        Experiences
         </h1>
-        <p style="font-size: 1.35rem; color: white;">
-            See my most recent projects below to get an idea of my past experiences.
-        </p>
+        
     </div>
-    <Container className="flex flex-col midmd:flex-row gap-10 lg:gap-12">
-        <div class="max-w-md mx-auto midmd:max-w-none lg:mx-0  lg:pr-10 xl:pr-2 flex-1 flex w-11/12 midmd:w-5/12 lg:w-1/2 midmd:h-auto">
-            <div class="w-full h-80 sm:h-96 midmd:h-full relative">
-                <div class="absolute rotate-45 -left-5 md:-left-10 lg:-left-20 xl:-left-24 p-1 top-1/2 w-16 h-16 bg-gradient-to-br from-primary to-orange-400 blur-3xl opacity-50"></div>
-                <div class="absolute  p-1 -top-4 md:-top-10 right-0 w-20 h-20 bg-gradient-to-br from-primary to-orange-400 rounded-full blur-3xl opacity-60"></div>
-                
-                <span class="absolute w-full aspect-[16/5] -skew-x-12 rounded-full bg-gradient-to-tr from-primary to-green-400 opacity-40 blur-2xl left-0 bottom-0"></span>
-                <img src={"/images/dev-with-c-1.webp"} alt="banner image" 
-                width="1240" height="1385"
-                class=" w-auto left-1/2 -translate-x-1/2 absolute bottom-0 max-h-full" />
-            </div>
-        </div>
-        <div class="flex-1 flex midmd:w-7/12 lg:w-1/2 flex-col">
-            <!-- <Title>
-                We help drive your business forward faster
-            </Title> -->
+    <Container className="flex flex-col midmd:flex-row gap-10 lg:gap-12 mt-2">
+        <div>
+            <h2 class="text-xl text-white mb-10">Frameworks I've worked with</h2>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-6 lg:gap-8">
+              <div class="flex flex-col items-center">
+                <div class="rounded-full p-1">
+                  <img src="../images/icons8-flutter-96.png" alt="Icon 1" class="w-15 h-15 rounded-none">
+                </div>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class=" rounded-full p-1">
+                  <img src="../images/icons8-mysql-96.png" alt="Icon 2" class="w-15 h-15 rounded-none">
+                </div>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class=" rounded-full p-1">
+                  <img src="../images/icons8-nodejs-96.png" alt="Icon 3" class="w-15 h-15 rounded-full">
+                </div>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="rounded-full p-1">
+                  <img src="../images/icons8-firebase-96.png" alt="Icon 4" class="w-15 h-15 rounded-full">
+                </div>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="rounded-full p-1">
+                  <img src="../images/icons8-postman-is-the-only-complete-api-development-environment-96.png" alt="Icon 5" class="w-15 h-15 rounded-full">
+                </div>
+              </div>
             
-            <Paragraph className="mt-8">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Minus, saepe aliquid autem alias vero distinctio dignissimos consequatur? Excepturi quibusdam, quam ipsum hic, laudantium ducimus suscipit, culpa facere consequuntur repellat delectus.
-            </Paragraph>
-            <div class="pt-8 grid grid-cols-2 items-center gap-4 max-w-3xl md:max-w-[none]">
-                <Info description="Lorem ipsum dolor sit amet consectetur" title="Mission">
-                    <span slot="icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 sm:w-5 sm:h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
-                        </svg>                              
-                    </span>
-                </Info>
-                <Info description="Lorem ipsum dolor sit amet consectetur" title="Vision">
-                    <span slot="icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="30" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4 sm:w-5 sm:h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        </svg>
-                    </span>
-                </Info>
             </div>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-6 lg:gap-8 mt-4">
+                <div class="flex flex-col items-center bg-white rounded-full">
+                    <div class="rounded-full p-1">
+                      <img src="../images/nextjs-fill-svgrepo-com (2).png" alt="Icon 1" class="w-13 h-13 rounded-none">
+                    </div>
+                  </div>
+                  
+              <div class="flex flex-col items-center">
+                <div class=" rounded-full p-1">
+                  <img src="../images/astro-svgrepo-com (1).png" alt="Icon 2" class="w-15 h-15 rounded-none">
+                </div>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class=" rounded-full p-1">
+                  <img src="../images/icons8-tailwindcss-96.png" alt="Icon 3" class="w-15 h-15 rounded-full">
+                </div>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="rounded-full p-1">
+                  <img src="../images/icons8-flask-100 (1).png" alt="Icon 4" class="w-15 h-15 rounded-full">
+                </div>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="rounded-full p-1">
+                  <img src="../images/icons8-python-96.png" alt="Icon 5" class="w-15 h-15 rounded-full">
+                </div>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-6 lg:gap-8 mt-6">
+                <div class="flex flex-col items-center bg-white rounded-full">
+                    <div class="rounded-full p-1">
+                      <img src="../images/icons8-mongodb-a-cross-platform-document-oriented-database-program-96.png" alt="Icon 1" class="w-13 h-13 rounded-none">
+                    </div>
+                  </div>
+                  
+              <div class="flex flex-col items-center">
+                <div class=" rounded-full p-1">
+                  <img src="../images/icons8-pandas-96.png" alt="Icon 2" class="w-15 h-15 rounded-none">
+                </div>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class=" rounded-full p-1">
+                  <img src="../images/tensorflow-svgrepo-com (1).png" alt="Icon 3" class="w-15 h-15 rounded-full">
+                </div>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="rounded-full p-1">
+                  <img src="../images/icons8-java-96.png" alt="Icon 4" class="w-15 h-15 rounded-full">
+                </div>
+              </div>
+              <div class="flex flex-col items-center">
+                <div class="rounded-full p-1">
+                  <img src="../images/icons8-arduino-96.png" alt="Icon 5" class="w-15 h-15 rounded-full">
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          
+        <div class="flex-1 flex midmd:w-7/12 lg:w-1/2 flex-col">
+            <p style="font-size: 1.35rem; color: white;">
+                Work Experience
+            </p>
+            <div class="flex items-center justify-between">
+                <div class="flex flex-col">
+                  <p class="text-xl text-white">Software Development Intern</p>
+                  <p class="text-primary">May 2022 - August 2022</p>
+                  <p class="text-xl text-white"><a href="https://ail.auriga.co.in/" target="_blank">Auriga Innovative Labs</a></p>
+                </div>
+                <div class="ml-4">
+                  <img src="../images/Untitled design.png" alt="Image" class="w-32 h-32 rounded-full">
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between mt-3">
+                <div class="flex flex-col">
+                  <p class="text-xl text-white">Research Intern</p>
+                  <p class="text-primary">August 2022 - May 2023</p>
+                  <p class="text-xl text-white"><a href= "http://tavlab.iiitd.edu.in/" target="_blank">TavLab | IIITD</a></p>
+                </div>
+                <div class="ml-4">
+                  <img src="../images/iiitd2.png" alt="Image" class="w-40 h-32 ">
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between mt-3">
+                <div class="flex flex-col">
+                  <p class="text-xl text-white">Flutter Development Intern</p>
+                  <p class="text-primary">May 2023 - Ongoing</p>
+                  <p class="text-xl text-white">Kalakumbh</p>
+                </div>
+                <div class="ml-4">
+                  <img src="../images/kalakumbh copy.png" alt="Image" class="w-32 h-32 ">
+                </div>
+              </div>
+              
         </div>
     </Container>
 </section>

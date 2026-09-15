@@ -16,11 +16,60 @@ export async function getStaticPaths() {
 }
 
 const { project, prev, next } = Astro.props;
+
+const site = Astro.site ?? new URL("https://www.pendi.works");
+const pageUrl = new URL(`/projects/${project.slug}`, site).href;
+
+const schema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CreativeWork",
+      name: project.name,
+      headline: `${project.name} — ${project.blurb}`,
+      description: project.blurb,
+      url: pageUrl,
+      image: new URL(project.cover ?? profile.ogImage, site).href,
+      dateCreated: project.year,
+      inLanguage: "en",
+      author: {
+        "@type": "Person",
+        name: profile.name,
+        url: site.href,
+      },
+      ...(project.team && {
+        contributor: project.team.map((m) => ({
+          "@type": "Person",
+          name: m.name,
+          ...(m.href && { url: m.href }),
+        })),
+      }),
+      keywords: [...project.tags, ...(project.keywords ?? [])].join(", "),
+      about: project.category,
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: site.href },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Projects",
+          item: new URL("/#projects", site).href,
+        },
+        { "@type": "ListItem", position: 3, name: project.name, item: pageUrl },
+      ],
+    },
+  ],
+};
 ---
 
 <Layout
-  title={`${project.name} — ${profile.name}`}
+  title={`${project.name} — ${project.category} project by ${profile.name}`}
   description={project.blurb}
+  image={project.cover ?? profile.ogImage}
+  type="article"
+  schema={schema}
 >
   <article class="relative pb-24">
     <!-- header -->
@@ -103,25 +152,16 @@ const { project, prev, next } = Astro.props;
                   project.team && (
                     <div>
                       <dt class="font-mono text-[10.5px] uppercase tracking-[0.18em] text-zinc-600">
-                        Built with
+                        Collaborators
                       </dt>
-                      <dd class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[15px] text-zinc-200">
+                      <dd class="mt-1.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[15px] text-zinc-200">
                         {project.team.map((m, i) => (
-                          <>
-                            {i > 0 && <span class="text-zinc-700">·</span>}
-                            {m.href ? (
-                              <a
+                          <span class="whitespace-nowrap">{m.href ? (<a
                                 href={m.href}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 class="link-underline text-accent-soft"
-                              >
-                                {m.name}
-                              </a>
-                            ) : (
-                              <span>{m.name}</span>
-                            )}
-                          </>
+                              >{m.name}</a>) : (m.name)}{i < project.team!.length - 1 ? "," : ""}</span>
                         ))}
                       </dd>
                     </div>
@@ -203,7 +243,7 @@ const { project, prev, next } = Astro.props;
 
             <div data-reveal class="mb-6 mt-16 flex items-center gap-4">
               <span class="font-mono text-xs uppercase tracking-[0.22em] text-zinc-500">
-                {project.team ? "What we built" : "What I built"}
+                What I built
               </span>
               <span class="rule h-px flex-1"></span>
             </div>
@@ -218,10 +258,96 @@ const { project, prev, next } = Astro.props;
                 ))
               }
             </ul>
+
+            {
+              project.sections?.map((section) => (
+                <>
+                  <div data-reveal class="mb-6 mt-16 flex items-center gap-4">
+                    <span class="font-mono text-xs uppercase tracking-[0.22em] text-zinc-500">
+                      {section.heading}
+                    </span>
+                    <span class="rule h-px flex-1" />
+                  </div>
+
+                  {section.paragraphs && (
+                    <div
+                      data-reveal
+                      class="space-y-5 text-[16.5px] leading-relaxed text-zinc-400"
+                    >
+                      {section.paragraphs.map((para) => (
+                        <p>{para}</p>
+                      ))}
+                    </div>
+                  )}
+
+                  {section.code && (
+                    <div class={section.paragraphs ? "mt-8 grid gap-4 sm:grid-cols-2" : "grid gap-4 sm:grid-cols-2"}>
+                      {section.code.map((block, i) => (
+                        <figure data-reveal data-reveal-delay={i * 60} class="min-w-0">
+                          {block.label && (
+                            <figcaption class="mb-2 font-mono text-[10.5px] uppercase tracking-[0.18em] text-zinc-600">
+                              {block.label}
+                            </figcaption>
+                          )}
+                          <pre class="overflow-x-auto rounded-xl border border-white/[0.07] bg-ink-950/70 p-4 font-mono text-[12.5px] leading-relaxed text-zinc-300"><code>{block.content}</code></pre>
+                        </figure>
+                      ))}
+                    </div>
+                  )}
+
+                  {section.items && (
+                    <ul class={section.paragraphs || section.code ? "mt-8 space-y-6" : "space-y-6"}>
+                      {section.items.map((item, i) => (
+                        <li
+                          data-reveal
+                          data-reveal-delay={i * 50}
+                          class="group relative rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 transition-colors duration-300 hover:border-accent/25"
+                        >
+                          <h3 class="text-[15.5px] font-medium text-zinc-100">{item.title}</h3>
+                          <p class="mt-2 text-[15px] leading-relaxed text-zinc-500">{item.body}</p>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </>
+              ))
+            }
+
+            {
+              project.keywords && (
+                <>
+                  <div data-reveal class="mb-6 mt-16 flex items-center gap-4">
+                    <span class="font-mono text-xs uppercase tracking-[0.22em] text-zinc-500">
+                      Keywords
+                    </span>
+                    <span class="rule h-px flex-1" />
+                  </div>
+                  <div data-reveal class="flex flex-wrap gap-1.5">
+                    {project.keywords.map((k) => (
+                      <span class="rounded-full border border-white/[0.07] bg-white/[0.02] px-3 py-1 font-mono text-[10.5px] text-zinc-500">
+                        {k}
+                      </span>
+                    ))}
+                  </div>
+                </>
+              )
+            }
+
+            {
+              project.source && (
+                <p data-reveal class="mt-14 border-t border-white/[0.07] pt-6 text-[13.5px] leading-relaxed text-zinc-600">
+                  <Fragment>Further reading: </Fragment><a
+                    href={project.source.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="link-underline text-zinc-400 transition-colors hover:text-white"
+                  >{project.source.label}</a>.</p>
+              )
+            }
           </div>
 
           <!-- results + stack detail -->
-          <aside class="lg:col-span-5 space-y-5">
+          <aside class="lg:col-span-5 space-y-5 lg:sticky lg:top-28 lg:self-start">
             {
               project.results && (
                 <div data-reveal class="edge-card rounded-2xl p-7">

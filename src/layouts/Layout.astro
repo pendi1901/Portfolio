@@ -6,12 +6,81 @@ import { profile } from "../data/site";
 export interface Props {
   title?: string;
   description?: string;
+  /** Absolute or root-relative image for social cards. */
+  image?: string;
+  /** Extra JSON-LD to emit alongside the site-wide Person schema. */
+  schema?: Record<string, unknown>;
+  /** Marks this page as an article rather than the site root. */
+  type?: "website" | "article";
 }
 
 const {
   title = `${profile.name} — Backend & Agentic AI Engineer`,
   description = profile.tagline,
+  image = profile.ogImage,
+  schema,
+  type = "website",
 } = Astro.props;
+
+const site = Astro.site ?? new URL("https://www.pendi.works");
+const canonical = new URL(Astro.url.pathname.replace(/\/$/, "") || "/", site);
+const ogImage = new URL(image, site);
+
+// Site-wide identity graph — this is what search engines and AI crawlers
+// use to build a knowledge-panel style entity for Ritvik.
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.name,
+  givenName: profile.first,
+  familyName: profile.last,
+  url: site.href,
+  image: new URL(profile.photo, site).href,
+  email: `mailto:${profile.email}`,
+  jobTitle: "Software Development Engineer",
+  description: profile.tagline,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Raleigh",
+    addressRegion: "NC",
+    addressCountry: "US",
+  },
+  alumniOf: [
+    {
+      "@type": "CollegeOrUniversity",
+      name: "North Carolina State University",
+      sameAs: "https://www.ncsu.edu/",
+    },
+    {
+      "@type": "CollegeOrUniversity",
+      name: "Indraprastha Institute of Information Technology, Delhi",
+      sameAs: "https://www.iiitd.ac.in/",
+    },
+  ],
+  worksFor: {
+    "@type": "Organization",
+    name: "HCL Software",
+    sameAs: "https://www.hcl-software.com/",
+  },
+  knowsAbout: [
+    "Backend engineering",
+    "Agentic AI",
+    "Model Context Protocol",
+    "Java",
+    "Spring Boot",
+    "TypeScript",
+    "Next.js",
+    "Test automation",
+    "Machine learning",
+    "Distributed systems",
+  ],
+  sameAs: [
+    profile.socials.github,
+    profile.socials.linkedin,
+    profile.socials.twitter,
+    profile.socials.fide,
+  ],
+};
 ---
 
 <!DOCTYPE html>
@@ -23,11 +92,28 @@ const {
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={profile.name} />
-    <meta property="og:type" content="website" />
+    <link rel="canonical" href={canonical.href} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={profile.name} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical.href} />
+    <meta property="og:image" content={ogImage.href} />
+    <meta property="og:image:alt" content={`${profile.name} — ${description}`} />
+    <meta property="og:locale" content="en_US" />
+
     <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage.href} />
+    <meta name="twitter:creator" content="@pendi1901" />
+
     <meta name="theme-color" content="#060709" />
+
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />

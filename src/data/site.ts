@@ -6,6 +6,7 @@ export const profile = {
   email: "ritvikhuntsjobs@gmail.com",
   phone: "(984) 998-0087",
   photo: "/images/home1.jpeg",
+  ogImage: "/images/home1.jpeg",
   roles: [
     "Backend Engineer",
     "Agentic AI Engineer",
@@ -176,6 +177,17 @@ export type Project = {
   highlights: { title: string; body: string }[];
   /** Optional grouped stack breakdown for the detail page. */
   stackDetail?: { label: string; items: string[] }[];
+  /** Long-form sections rendered after the highlights on the detail page. */
+  sections?: {
+    heading: string;
+    paragraphs?: string[];
+    items?: { title: string; body: string }[];
+    code?: { label?: string; content: string }[];
+  }[];
+  /** Research keywords, rendered as a chip cloud at the foot of the page. */
+  keywords?: string[];
+  /** Attribution for a write-up this page draws on. */
+  source?: { label: string; href: string };
 };
 
 export const projects: Project[] = [
@@ -235,7 +247,7 @@ export const projects: Project[] = [
     featured: true,
     accent: "from-sky-500 to-cyan-400",
     cover: null,
-    role: "Full-stack",
+    role: "Full-stack — rooms, judge integration, and AI assistant",
     context: "Semester project",
     links: [{ label: "GitHub", href: "https://github.com/pendi1901" }],
     overview: [
@@ -261,57 +273,223 @@ export const projects: Project[] = [
     slug: "f1-race-predictor",
     name: "Formula 1 Race Results Predictor",
     blurb:
-      "A machine-learning approach to predicting Formula 1 Grand Prix outcomes, trained on every race from 1950 to 2022.",
+      "A machine-learning approach to predicting Formula 1 Grand Prix outcomes, built on every race from 1950 to 2022.",
     period: "Mar 2023 — May 2023",
     year: "2023",
-    tags: ["Python", "scikit-learn", "Pandas", "Flask", "Web scraping"],
+    tags: ["Python", "scikit-learn", "Pandas", "Flask", "Web scraping", "Feature engineering"],
     category: "ML",
     featured: true,
     accent: "from-rose-500 to-orange-400",
     cover: "/images/Holocron (1).png",
-    role: "Data collection, feature engineering, modeling",
+    role: "Data collection, feature engineering, and model training",
     context: "Research project under Prof. Anubha Gupta, IIIT Delhi",
-    team: [{ name: "Jaideep Guntupalli", href: "https://imjaideep.com/projects/f1-predictor" }],
+    team: [{ name: "Jaideep Guntupalli", href: "https://gjd.one/" }],
+    source: {
+      label: "Jaideep's write-up",
+      href: "https://imjaideep.com/projects/f1-predictor",
+    },
     links: [
       { label: "Website", href: "https://f1-predictor.gjd.one/" },
-      { label: "GitHub", href: "https://github.com/JaideepGuntupalli/f1-predictor" },
+      { label: "GitHub", href: "https://github.com/jaideepguntupalli/f1-predictor" },
+      {
+        label: "Presentation",
+        href: "https://www.canva.com/design/DAFhkfLrmuY/view?utm_content=DAFhkfLrmuY&utm_campaign=designshare&utm_medium=embeds&utm_source=link",
+      },
     ],
     advisor: { name: "Prof. Anubha Gupta", href: "https://www.iiitd.ac.in/anubha" },
     results: [
-      { label: "SVC", value: "0.95", note: "best performing" },
-      { label: "Random Forest", value: "0.94" },
+      { label: "Support Vector Classifier", value: "0.95", note: "highest accuracy" },
+      { label: "Random Forest Classifier", value: "0.94", note: "selected as final model" },
       { label: "Logistic Regression", value: "0.93" },
       { label: "K-Nearest Neighbors", value: "0.93" },
       { label: "Gaussian Naive Bayes", value: "0.87" },
-      { label: "Baseline, pre-feature-engineering", value: "0.50 — 0.68" },
+      { label: "Baseline, before feature engineering", value: "0.50 — 0.68" },
     ],
     overview: [
-      "Predicting a Formula 1 race winner is usually done by argument — pundits, form guides, gut feel. This project set out to do it with data instead: propose a machine-learning methodology for predicting the next Grand Prix winner, run a robust analysis of which factors actually contribute, and predict a band of likely winners across varying conditions.",
-      "The dataset spans the entire history of the sport. Race information, results, and standings from 1950 to 2022 came from the Ergast repository; qualifying data was scraped from the official Formula 1 website; and weather for each race was assembled from Wikipedia and OpenWeatherMap.",
-      "The headline finding was how much home advantage matters. Running a race in your own country turned out to have an outsized effect on outcome — one of those results that feels obvious once you see it and invisible until you measure it.",
+      "Formula 1 is one of the most prestigious and challenging motorsports in the world, and predicting the winner of the next Grand Prix is genuinely hard. Plenty of people try, but most of it rests on subjective opinion rather than data. We wanted to see how far a rigorous, data-driven approach could get.",
+      "The project is a comprehensive methodology for predicting driver performance in Formula 1 races. It combines six classification models with heavy exploratory analysis to work out which factors actually influence whether a driver reaches the podium, scores points, or fails to finish at all — considering weather conditions, driver and constructor standings, qualifying results, and race history, both present and past. That signal is buried across many separate datasets, and a large part of the work was merging them into something coherent.",
+      "Beyond the prediction itself, the goal was inference: not just producing a number, but using the models and their results to identify what actually contributes to a win. The answer that surprised us most was home advantage — the familiarity of the track and the support of a home crowd turned out to have a genuinely outsized effect on race outcomes.",
     ],
     highlights: [
       {
-        title: "Feature engineering was the whole game",
-        body: "Off raw inputs, the models sat at 0.50 to 0.68 accuracy — not good enough to be interesting. Engineered features pushed the best model to 0.95. The lesson was that the choice of model mattered far less than what the model was allowed to see.",
+        title: "Driver and Constructor DNF index",
+        body: "We introduced DNF indices for both drivers and constructors to quantify how much driver error and constructor error each contribute to race results. Reliability history carries real predictive signal that a simple finishing-position average washes out entirely.",
       },
       {
-        title: "Confidence and DNF indices",
-        body: "Built driver and constructor DNF indices, plus driver and constructor confidence scores measured as the percentage of races completed without a DNF. Reliability history turned out to carry real predictive signal that a finishing-position average washes out.",
+        title: "Driver and constructor confidence",
+        body: "Engineered a confidence score calculated as the percentage of races a driver had completed without a DNF, with the equivalent for constructors — capturing relative reliability against the rest of the field rather than in isolation.",
       },
       {
-        title: "Context features",
-        body: "Layered in home team advantage, circuit-specific performance, and driver nationality, experience, and historical record — the situational factors that separate a driver's general form from their form at this particular race.",
+        title: "Home team effect",
+        body: "Built columns capturing the home advantage of drivers and constructors. This turned out to be the single most interesting finding of the project: competing in your own country has a humongous impact on outcome.",
       },
       {
-        title: "Six models, cross-validated",
-        body: "Trained and compared Logistic Regression, Decision Tree, Random Forest, SVM, Gaussian Naive Bayes, and K-Nearest Neighbors, using k-fold cross-validation, hyperparameter tuning, and feature selection to pick between them.",
+        title: "One-hot encoding across mixed data",
+        body: "Used one-hot encoding to transform both categorical and numerical data — nationalities, constructors, circuits — into a format the classifiers could consume.",
+      },
+      {
+        title: "Feature selection and hyperparameter tuning",
+        body: "Applied selection techniques to identify the genuinely important features and discard the ones we had wrongly assumed mattered, then tuned hyperparameters per model with k-fold cross-validation to avoid overfitting.",
+      },
+    ],
+    sections: [
+      {
+        heading: "The dataset",
+        paragraphs: [
+          "No single source had what we needed, so the data was assembled from several. The Ergast Data repository carried comprehensive historical Formula 1 data, but it had real gaps, and the rest had to be scraped. Six individual dataframes were collected and merged into one final dataset, keeping the features we believed influenced race outcome and stripping the redundant columns.",
+        ],
+        items: [
+          {
+            title: "All races information",
+            body: "Every race from the first year of Formula 1 in 1950 through to 2022 — season, round, location, and the Wikipedia link for each.",
+          },
+          {
+            title: "All results",
+            body: "Iterating through every year and every race of each season to collect all drivers and their results, including nationality and the constructor they drove for, while discarding fields that carried no signal.",
+          },
+          {
+            title: "Driver standings",
+            body: "Points per driver after each race — only the top 10 drivers score, with a maximum of 25 points for a win.",
+          },
+          {
+            title: "Constructor standings",
+            body: "The top three constructors after every race, accounting for the fact that these points accumulate across the season rather than resetting.",
+          },
+          {
+            title: "Qualifying standings",
+            body: "The Ergast repository was unreliable here — the data had too many holes — so we web-scraped qualifying results directly from the official Formula 1 website instead.",
+          },
+          {
+            title: "Weather information",
+            body: "Ergast doesn't cover weather at all, despite it drastically affecting race outcome. We scraped conditions at the race location for the race duration from Wikipedia, falling back to OpenWeatherMap where Wikipedia had nothing.",
+          },
+        ],
+      },
+      {
+        heading: "Exploratory analysis",
+        paragraphs: [
+          "Before modeling anything we went deep on the data itself — circuit analysis, driver nationality, championship wins, and the number of races won by each driver and constructor.",
+          "Clear trends emerged: the dominance of teams like Ferrari and Mercedes by both race wins and championships, and a meaningful split in DNF ratio between driver error and constructor error, which sharpened how much reliability matters in this sport.",
+          "We also investigated how drivers and constructors perform in their home races. The plots made it obvious — home ground carries a large advantage — and that observation went on to shape the entire feature engineering approach.",
+        ],
+      },
+      {
+        heading: "Modeling",
+        paragraphs: [
+          "We trained six classification models to predict whether a driver would finish on the podium, finish in the points, or record a DNF: Logistic Regression, Decision Tree, Random Forest, Support Vector Machine, Gaussian Naive Bayes, and K-Nearest Neighbors. They were chosen for their standing in the literature and their fit to classification problems.",
+          "Parameters were selected through research and experimentation rather than defaults. The Decision Tree used the entropy criterion to measure split quality with a bounded max_depth to prevent overfitting; the Random Forest tuned n_estimators for the number of trees and max_features to limit the features considered at each split.",
+          "Every model was assessed with k-fold cross-validation — partitioning the data into k equal subsets and training and evaluating k times, each time holding out a different subset. That gave a far more reliable estimate of generalization than a single train/test split, and let us tune hyperparameters without overfitting to one particular partition.",
+          "Random Forest was ultimately selected as the final model. Although SVC scored marginally higher on raw accuracy, Random Forest provided feature importance scores, which let us identify which features were actually driving the predictions — the inference half of the project's goal.",
+        ],
+      },
+      {
+        heading: "Evaluation",
+        paragraphs: [
+          "Accuracy was the headline metric — the proportion of correctly classified instances over the total. Alongside it we tracked precision, recall, and F1 score, which account for the trade-offs between true positive, false positive, true negative, and false negative rates, and used cross-validation throughout to test robustness rather than a single lucky split.",
+        ],
+      },
+      {
+        heading: "Results",
+        paragraphs: [
+          "The first pass was disappointing. Training on the raw combined dataset, four algorithms — logistic regression, a neural network regressor, random forest, and SVC — landed between 0.50 and 0.68 accuracy. Not useless, but nowhere near what we expected.",
+          "The cause was our own assumptions. We had thrown in a large number of variables we believed would influence race outcome. They did influence it, technically — just insignificantly, and collectively they drowned the signal that mattered.",
+          "Applying the engineered features — driver and constructor confidence, home team advantage, DNF rate — plus feature selection and hyperparameter tuning produced a substantial jump across every model. SVC reached 0.95, Random Forest 0.94, Logistic Regression and K-Nearest Neighbors both 0.93, and Gaussian Naive Bayes 0.87.",
+          "The lesson was unambiguous and is the one I've carried into everything since: the choice of model mattered far less than what the model was allowed to see.",
+        ],
+      },
+      {
+        heading: "What was novel",
+        paragraphs: [
+          "Motorsport analysis leans heavily on human intuition and subjective opinion. Taking a strictly data-driven approach to predicting outcomes was itself part of the contribution, but the novel features were the real addition — driver and constructor confidence, home team effects, and DNF ratios and indices for both drivers and constructors. Together they captured nuances of motorsport performance that the standard variables miss entirely.",
+        ],
+      },
+      {
+        heading: "Where it applies",
+        items: [
+          {
+            title: "Sports betting",
+            body: "Data-driven likelihoods for podium, points, and DNF outcomes give bettors a grounded basis for decisions instead of form-guide intuition.",
+          },
+          {
+            title: "Team management",
+            body: "Insight into what actually contributes to driver and constructor success supports strategic calls on driver selection, race strategy, and car development.",
+          },
+          {
+            title: "Fantasy Formula 1",
+            body: "Predicting race outcomes lets you select the top-performing drivers and constructors within a limited fantasy budget, maximising expected points across a league.",
+          },
+          {
+            title: "Driver development",
+            body: "Analysing driver performance across multiple seasons and circuits surfaces which skills and attributes most predict success, useful for identifying talent early.",
+          },
+        ],
+      },
+      {
+        heading: "Limitations and what's next",
+        paragraphs: [
+          "The models predict podium and points bands accurately, but predicting exact finishing positions at the same confidence remains out of reach. The other clear gap is that everything here is static — incorporating real-time race data would allow dynamic, in-race prediction rather than a single pre-race call.",
+          "With better data access, both are tractable. The broader approach isn't specific to motorsport either; the same methodology transfers to other sports and to domains like finance and marketing.",
+        ],
       },
     ],
     stackDetail: [
-      { label: "Data", items: ["Ergast repository (1950–2022)", "F1.com qualifying scrape", "Wikipedia + OpenWeatherMap"] },
-      { label: "Modeling", items: ["scikit-learn", "k-fold cross-validation", "hyperparameter tuning", "feature selection"] },
-      { label: "Delivery", items: ["Python", "Flask", "Pandas"] },
+      {
+        label: "Data sources",
+        items: [
+          "Ergast repository (1950–2022)",
+          "Formula1.com qualifying scrape",
+          "Wikipedia weather",
+          "OpenWeatherMap",
+        ],
+      },
+      {
+        label: "Modeling",
+        items: [
+          "Logistic Regression",
+          "Decision Tree",
+          "Random Forest",
+          "SVM",
+          "Gaussian Naive Bayes",
+          "K-Nearest Neighbors",
+        ],
+      },
+      {
+        label: "Technique",
+        items: [
+          "k-fold cross-validation",
+          "Hyperparameter tuning",
+          "Feature selection",
+          "One-hot encoding",
+        ],
+      },
+      { label: "Delivery", items: ["Python", "Pandas", "scikit-learn", "Flask"] },
+    ],
+    keywords: [
+      "motorsport",
+      "Formula One",
+      "data analysis",
+      "machine learning",
+      "classification",
+      "driver performance",
+      "constructor performance",
+      "podium prediction",
+      "points prediction",
+      "DNF index",
+      "home team effect",
+      "circuit analysis",
+      "race history",
+      "driver nationality",
+      "neural networks",
+      "statistical modeling",
+      "predictive modeling",
+      "feature engineering",
+      "exploratory data analysis",
+      "data visualization",
+      "data preprocessing",
+      "data cleaning",
+      "data transformation",
+      "feature selection",
+      "model evaluation",
     ],
   },
   {
@@ -352,66 +530,116 @@ export const projects: Project[] = [
     slug: "holocron-oauth",
     name: "Holocron Auth",
     blurb:
-      "A user-friendly OAuth system for identity verification over mobile number and email, with granular control over what each linked app can see.",
+      "A simple, user-friendly OAuth system for secure identity verification over mobile number and email — a centralized platform where users control exactly what each linked app can access.",
     period: "2023",
     year: "2023",
     tags: ["TypeScript", "Next.js", "tRPC", "Prisma", "MySQL", "Flutter", "Twilio", "AWS S3"],
     category: "Full-stack",
     accent: "from-indigo-500 to-blue-400",
     cover: "/images/Holocron.png",
-    role: "Development — four-person team",
+    role: "Core developer — auth flows, OTP delivery, and access control",
     context: "Course project at IIIT Delhi, under Prof. Arun Balaji",
     team: [
-      { name: "Jaideep Guntupalli", href: "https://imjaideep.com/projects/holocron-auth" },
-      { name: "Ritvik Pendyala" },
-      { name: "Prakhar Bhargava" },
-      { name: "Tejdeep Chippa" },
+      { name: "Jaideep Guntupalli", href: "https://gjd.one/" },
+      { name: "Prakhar Bhargava", href: "https://github.com/prakhar20394" },
+      { name: "Tejdeep Chippa", href: "https://github.com/phoenix1881" },
     ],
+    source: {
+      label: "Jaideep's write-up",
+      href: "https://imjaideep.com/projects/holocron-auth",
+    },
     links: [
-      { label: "Website", href: "https://holocron-auth.gjd.one/" },
-      { label: "APKs", href: "https://holocron-auth.gjd.one/download-app" },
-      { label: "GitHub", href: "https://github.com/Holocron-Auth" },
+      { label: "Website", href: "https://holocron-auth.gjd.one" },
+      { label: "Download app", href: "https://holocron-auth.gjd.one/download-app" },
+      { label: "GitHub", href: "https://github.com/holocron-auth" },
     ],
     advisor: { name: "Prof. Arun Balaji", href: "https://faculty.iiitd.ac.in/~arunb/" },
     results: [
-      { label: "Simultaneous users in a live attack", value: "200+", note: "held for a week" },
+      { label: "Simultaneous attackers withstood", value: "200+", note: "sustained for a week" },
       { label: "Course ranking", value: "1st", note: "highest-scoring project" },
     ],
     overview: [
-      "Holocron is a centralized OAuth service that lets developers add secure identity verification — over mobile number or email — without building an auth system of their own.",
-      "The part we cared most about was user agency. Most OAuth flows ask you to approve a wall of permissions once and then never mention it again. Holocron keeps the user in control after the fact: you can see every app you've linked, see a security score for each one, restrict exactly which fields an app can read, and disconnect any of them whenever you want.",
-      "It held up under real adversarial conditions. Over the course of a week, the deployed system withstood a coordinated cyberattack from more than 200 simultaneous users, and it finished as the highest-scoring project in the course.",
+      "Holocron is an authentication and authorization service built to give developers a secure, easy-to-use, and reliable method of authenticating users. Users verify their mobile number and email ID up front, and from that point Holocron acts as a centralized platform for managing their online presence and controlling access to their personal information.",
+      "The design goal that shaped everything else was user control. Holocron gives users complete authority over their own data and the ability to choose which third-party services can access it — so the data stays safe while the authentication experience stays hassle-free. It adheres to privacy regulations and guidelines while still offering developers a seamless integration path.",
+      "For developers, it means a robust and scalable authentication system without building one from scratch. Backup login methods keep the authentication process protected against identity theft, number hijacking, and the other failure modes that phone-based auth is prone to.",
     ],
     highlights: [
       {
-        title: "OTP over SMS and email",
-        body: "Fast one-time-password delivery for both mobile and email verification, with Twilio handling SMS and Nodemailer handling mail.",
+        title: "Fast OTPs",
+        body: "Fast, reliable one-time passwords for verification, so users can quickly confirm their mobile number and email ID and securely reach both the platform and every linked app. Twilio handles SMS delivery; Nodemailer handles email.",
       },
       {
-        title: "Transparent app linking",
-        body: "Users see every third-party app connected to their identity, with a security score for each one and a one-click disconnect — so consent stays revocable rather than permanent.",
+        title: "Easy integration",
+        body: "Designed to drop into other applications with minimal friction — simplifying the authentication process for developers while keeping the experience seamless for the end user.",
+      },
+      {
+        title: "Better user control with more data",
+        body: "Complete transparency over app access and data sharing. Users see a list of every app linked to their account and can opt out or unlink from any of them at any time. A security score for each linked app lets users make informed decisions about what they connect to, adding another layer of protection and transparency.",
+      },
+      {
+        title: "Strong security measures",
+        body: "Advanced encryption techniques and security protocols protect user data from unauthorized access — the platform treats privacy and security as the primary constraint rather than a feature.",
+      },
+      {
+        title: "Customisable and scalable",
+        body: "Highly customisable and scalable, so it suits a wide range of applications and use cases. Developers can adapt the platform to their specific needs without losing the security guarantees.",
+      },
+      {
+        title: "Multi-factor authentication",
+        body: "Multi-factor options layer additional protection on top of the primary verification path, guarding against unauthorised access even when one factor is compromised.",
       },
       {
         title: "Granular access controls",
-        body: "Rather than an all-or-nothing grant, users choose selectively which pieces of their data each application is allowed to read.",
+        body: "Rather than an all-or-nothing grant, users control exactly which data they share with each linked app individually — choosing to share only what a given application genuinely needs.",
+      },
+    ],
+    sections: [
+      {
+        heading: "Use cases",
+        items: [
+          {
+            title: "App authentication",
+            body: "Secure authentication for mobile apps, letting users log in without remembering multiple sets of credentials — and removing the need for developers to build a separate authentication system per app.",
+          },
+          {
+            title: "Website authentication",
+            body: "A seamless login experience on the web, eliminating repeated credentials. That increases user engagement and reduces the rate of abandoned accounts.",
+          },
+          {
+            title: "Remote access",
+            body: "Secure authentication for remote workers reaching company resources and services from outside the office — maintaining security without costing productivity.",
+          },
+        ],
       },
       {
-        title: "Type-safe end to end",
-        body: "Built on tRPC over a Next.js server with Prisma against MySQL, so the contract between client and API was checked at compile time rather than trusted by convention.",
+        heading: "How it's built",
+        paragraphs: [
+          "The application is built on Next.js. The client side covers two surfaces: a web interface in React and Tailwind CSS, and a mobile interface in Flutter. Both talk to the same service.",
+          "The server side is a backend built with tRPC, chosen so the entire codebase is typesafe end to end — the contract between client and API is checked at compile time rather than trusted by convention. That mattered more than usual here, because in an auth system a silently mismatched field is a security bug, not a rendering bug.",
+          "Data lives in a MySQL server hosted on PlanetScale, with Prisma as the ORM to carry type safety down to the database layer. AWS S3 handles file storage. Security features to defend against potential attacks are built into the system rather than layered on afterwards — which turned out to matter.",
+        ],
       },
       {
-        title: "Web and Android clients",
-        body: "A Next.js, React, and Tailwind web UI alongside a Flutter Android app, both talking to the same authentication service.",
-      },
-      {
-        title: "Survived a live attack",
-        body: "Withstood a cyberattack from 200+ simultaneous users sustained over a week — the security scoring, encryption, and multi-factor paths tested under genuine load rather than in a demo.",
+        heading: "Tested under attack",
+        paragraphs: [
+          "The system wasn't just demoed, it was attacked. Over the course of a week, the deployed platform sustained a coordinated cyberattack from more than 200 students simultaneously attempting to break it.",
+          "It held. The encryption, the multi-factor paths, and the security scoring were all exercised under genuine adversarial load rather than in a controlled presentation, and the project finished as the highest-scoring one in the course.",
+        ],
       },
     ],
     stackDetail: [
-      { label: "Frontend", items: ["Next.js", "React", "Tailwind CSS", "Flutter (Android)"] },
-      { label: "Backend", items: ["tRPC", "Next.js server", "Twilio", "Nodemailer"] },
-      { label: "Data", items: ["MySQL on PlanetScale", "Prisma ORM", "AWS S3"] },
+      {
+        label: "Frontend",
+        items: ["Next.js", "ReactJS", "TailwindCSS", "Flutter (Android)"],
+      },
+      {
+        label: "Backend",
+        items: ["tRPC", "TypeScript", "Nodemailer (email)", "Twilio (SMS)"],
+      },
+      {
+        label: "Data",
+        items: ["MySQL on PlanetScale", "Prisma ORM", "AWS S3"],
+      },
     ],
   },
   {
@@ -459,7 +687,7 @@ export const projects: Project[] = [
     category: "Full-stack",
     accent: "from-cyan-500 to-blue-400",
     cover: "/images/AIIMS TB App (1).png",
-    role: "Full-stack",
+    role: "Solo — schema, queries, and application",
     context: "Database systems coursework, IIIT Delhi",
     links: [{ label: "GitHub", href: "https://github.com/pendi1901/ORS_Project-1/tree/master" }],
     advisor: { name: "Prof. Mukesh Mohania", href: "https://www.iiitd.ac.in/mukesh" },
@@ -482,29 +710,143 @@ export const projects: Project[] = [
     slug: "assembler-and-simulator",
     name: "Assembler & Simulator",
     blurb:
-      "An assembler and simulator in Python that transforms assembly input into machine code and executes it.",
+      "An assembler that turns assembly language into 16-bit machine code, and a simulator that executes it — memory, registers, flags and all.",
     period: "2022",
     year: "2022",
-    tags: ["Python", "Computer Architecture"],
+    tags: ["Python", "Assembly", "Machine Code", "Computer Architecture", "Bash"],
     category: "Systems",
     accent: "from-slate-400 to-zinc-500",
     cover: "/images/AIIMS TB App (4).png",
-    role: "Implementation",
+    role: "Built the assembler and simulator end to end",
     context: "Computer architecture coursework, IIIT Delhi",
-    links: [{ label: "GitHub", href: "https://github.com/pendi1901/Simulator" }],
+    team: [{ name: "Jaideep Guntupalli", href: "https://gjd.one/" }],
+    source: {
+      label: "Jaideep's write-up",
+      href: "https://imjaideep.com/projects/assemble-simulator",
+    },
+    links: [
+      { label: "GitHub", href: "https://github.com/pendi1901/Simulator" },
+      {
+        label: "Assembler repo",
+        href: "https://github.com/jaideepguntupalli/Assembler-and-Simulator",
+      },
+    ],
     advisor: { name: "Prof. Sujay Deb", href: "https://www.iiitd.ac.in/sdeb" },
     overview: [
-      "An intricately designed assembler and simulator implemented in Python, capable of seamlessly transforming assembly language inputs into their corresponding machine code outputs.",
-      "Writing both halves is what makes the exercise worthwhile — the assembler forces you to be exact about encoding, and the simulator immediately punishes you when you are not. Every instruction you emit is one you then have to execute.",
+      "This project is two tools that meet in the middle. The assembler takes assembly language and returns 16-bit machine code; the simulator takes that machine code and executes it, reporting the state of memory and every register as it goes.",
+      "Writing both halves is what makes the exercise worth doing. The assembler forces you to be exact about instruction encoding, and the simulator immediately punishes you when you are not — every instruction you emit is one you then have to decode and execute. Together they give a complete picture of how assembly is translated and then actually run inside a computer system.",
     ],
     highlights: [
       {
-        title: "Assembler",
-        body: "Parses assembly source and emits the corresponding machine code, handling instruction encoding and the full instruction set.",
+        title: "Assembler — assembly to 16-bit machine code",
+        body: "Handles every supported instruction, processes labels and variables, checks for illegal instructions with distinct error messages per failure mode, and emits the corresponding binary for error-free code.",
       },
       {
-        title: "Simulator",
-        body: "Executes the generated machine code through the full instruction cycle, with register and memory state inspection at each step.",
+        title: "Line-type parsing",
+        body: "Distinguishes the three shapes a line can take — a variable definition at the top of the program, a label followed by an instruction, or a bare instruction — and handles each correctly, including resolving labels to addresses.",
+      },
+      {
+        title: "Syntax handling across operand types",
+        body: "Manages opcodes, registers, memory addresses, and immediate values, each with its own encoding rules inside the 16-bit word.",
+      },
+      {
+        title: "Error detection",
+        body: "Detects and reports typos, undefined variables, misuse of labels, and incorrect syntax — with a distinct message per error type rather than a single generic failure.",
+      },
+      {
+        title: "Simulator — machine code execution",
+        body: "Loads and executes code from system memory, printing the program counter and all register values after every instruction, then dumping the complete memory state once the program halts.",
+      },
+    ],
+    sections: [
+      {
+        heading: "Assembling, end to end",
+        paragraphs: [
+          "The assembler reads assembly instructions — including variable definitions and labels — and produces one 16-bit binary word per line. Anything it can't encode comes back as an error message instead of silently wrong output.",
+        ],
+        code: [
+          {
+            label: "Input — assembly",
+            content: `var X
+mov R1 $10
+mov R2 $100
+mul R3 R1 R2
+st R3 X
+hlt`,
+          },
+          {
+            label: "Output — 16-bit machine code",
+            content: `0001000100001010
+0001001001100100
+0011000011001010
+0010101100000101
+1001100000000000`,
+          },
+        ],
+      },
+      {
+        heading: "Inside the simulator",
+        paragraphs: [
+          "The simulator reads 16-bit machine code from stdin and is built from four distinct components, each mirroring a real part of the machine.",
+        ],
+        items: [
+          {
+            title: "Memory (MEM)",
+            body: "Stores 512 bytes, initialized to zeros, and handles 8-bit address input.",
+          },
+          {
+            title: "Program Counter (PC)",
+            body: "An 8-bit register pointing at the instruction currently being executed.",
+          },
+          {
+            title: "Register File (RF)",
+            body: "Manages register values, covering the general-purpose registers and the FLAGS register.",
+          },
+          {
+            title: "Execution Engine (EE)",
+            body: "Executes each instruction by updating the register file and the program counter based on what it reads out of memory.",
+          },
+        ],
+      },
+      {
+        heading: "Output format",
+        paragraphs: [
+          "After every instruction the simulator emits the program counter alongside the full register state, then dumps all of memory once the program halts — so you can single-step a program and watch the machine change underneath it.",
+        ],
+        code: [
+          {
+            label: "Per-instruction trace, then memory dump",
+            content: `<PC (8 bits)> <space> <R0 (16 bits)> <space>...<R6 (16 bits)> <space> <FLAGS (16 bits)>
+< 16-bit data>
+...
+< 16-bit data>`,
+          },
+        ],
+      },
+      {
+        heading: "Running it",
+        items: [
+          {
+            title: "Assembler",
+            body: "Add your code to the Simple-Assembler directory and execute it with the script at Simple-Assembler/run.",
+          },
+          {
+            title: "Simulator",
+            body: "Add your code to the SimpleSimulator directory and execute it with the script at SimpleSimulator/run.",
+          },
+          {
+            title: "Automated testing",
+            body: "An automatedTesting harness evaluates commits across a range of options, so regressions in either half surface without manual re-checking.",
+          },
+        ],
+      },
+    ],
+    stackDetail: [
+      { label: "Core", items: ["Python", "Assembly language", "16-bit machine code"] },
+      { label: "Tooling", items: ["Bash run scripts", "Automated testing harness"] },
+      {
+        label: "Concepts",
+        items: ["Instruction encoding", "Label resolution", "Register file", "Program counter", "FLAGS"],
       },
     ],
   },

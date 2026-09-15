@@ -30,6 +30,9 @@ Append an entry to the `projects` array. Every project automatically gets its ow
 | `role`, `context` | Shown in the detail meta panel |
 | `team` | Collaborators; also switches the heading to "What we built" |
 | `results` | Optional `{label, value, note}[]` — renders a results table on the detail page |
+| `sections` | Long-form `{heading, paragraphs?, items?, code?}[]` rendered after the highlights |
+| `keywords` | Research keyword chips at the foot of the page |
+| `source` | Attribution link to a write-up the page draws on |
 | `featured` | `true` promotes it into the three-card row on the homepage |
 
 Cover images are all 1748×1240 (ratio 1.41), and every frame uses `aspect-[7/5]` to match, so
@@ -62,6 +65,27 @@ src/
 | `npm run dev`     | Dev server at `localhost:3000`              |
 | `npm run build`   | Build production site to `./dist/`          |
 | `npm run preview` | Preview the build locally                   |
+
+## SEO
+
+The canonical origin is set once, in `astro.config.mjs` (`site`). Change it there and canonical
+URLs, Open Graph tags and the sitemap all follow. `public/robots.txt` hardcodes the sitemap URL —
+update it there too if the domain changes.
+
+What's emitted:
+
+- **Canonical URL**, `robots` (with `max-image-preview:large`), and per-page title + description
+- **Open Graph + Twitter card** on every page, using the project cover as the share image on
+  project pages and the portrait on the homepage
+- **`Person` JSON-LD** site-wide — job title, employer, both universities, `knowsAbout`, and
+  `sameAs` links to GitHub / LinkedIn / X / FIDE. This is what search engines and AI crawlers
+  use to build an entity for Ritvik rather than treating each page as loose text.
+- **`CreativeWork` + `BreadcrumbList` JSON-LD** per project page, with collaborators as
+  `contributor` and tags + keywords as `keywords`
+- **`/sitemap.xml`**, generated from the `projects` array by `src/pages/sitemap.xml.ts` —
+  new projects appear automatically, featured ones at higher priority
+
+After deploying, submit the sitemap in Google Search Console once to speed up first indexing.
 
 ## Notes
 

@@ -1,0 +1,55 @@
+---
+import Container from "../shared/Container.astro";
+import SectionHeading from "../shared/SectionHeading.astro";
+import { skillGroups } from "../../data/site";
+
+const marquee = skillGroups.flatMap((g) => g.items);
+---
+
+<section id="skills" class="relative scroll-mt-24 py-24 lg:py-32">
+  <Container>
+    <SectionHeading
+      index="04"
+      eyebrow="Toolkit"
+      title="What I reach for."
+      lede="Java and Spring for the platforms, TypeScript and Next.js for the surfaces, and an increasing amount of agent tooling in between."
+    />
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      {
+        skillGroups.map((group, i) => (
+          <div
+            data-reveal
+            data-reveal-delay={i * 80}
+            class="edge-card group rounded-2xl p-7 transition-transform duration-500 hover:-translate-y-1"
+          >
+            <div class="mb-5 flex items-center gap-3">
+              <span class="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-soft/80">
+                {group.label}
+              </span>
+              <span class="rule h-px flex-1" />
+            </div>
+            <div class="flex flex-wrap gap-2">
+              {group.items.map((item) => (
+                <span class="rounded-lg border border-white/[0.07] bg-white/[0.03] px-3 py-1.5 text-[13px] text-zinc-400 transition-all duration-300 hover:border-accent/40 hover:bg-accent/10 hover:text-white">
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </Container>
+
+  <!-- marquee -->
+  <div class="marquee-mask mt-16 flex overflow-hidden py-4" aria-hidden="true">
+    <div class="flex shrink-0 animate-marquee items-center gap-10 pr-10">
+      {
+        [...marquee, ...marquee].map((t) => (
+          <span class="whitespace-nowrap font-display text-2xl text-white/[0.09]">{t}</span>
+        ))
+      }
+    </div>
+  </div>
+</section>

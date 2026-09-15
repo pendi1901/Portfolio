@@ -1,0 +1,20 @@
+---
+export interface Props {
+  eyebrow: string;
+  title: string;
+  lede?: string;
+  index?: string;
+}
+const { eyebrow, title, lede, index } = Astro.props;
+---
+<header class="mb-14 max-w-3xl" data-reveal>
+  <div class="mb-5 flex items-center gap-4">
+    {index && <span class="font-mono text-xs tracking-widest text-accent-soft/70">{index}</span>}
+    <span class="font-mono text-xs uppercase tracking-[0.22em] text-zinc-500">{eyebrow}</span>
+    <span class="rule h-px flex-1"></span>
+  </div>
+  <h2 class="font-display text-4xl leading-[1.05] tracking-tight text-white sm:text-5xl md:text-6xl">
+    <Fragment set:html={title} />
+  </h2>
+  {lede && <p class="mt-5 text-base leading-relaxed text-zinc-400 sm:text-lg">{lede}</p>}
+</header>

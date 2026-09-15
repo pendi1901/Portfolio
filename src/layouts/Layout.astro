@@ -1,115 +1,323 @@
 ---
 import Footer from "../components/elements/Footer.astro";
 import Navbar from "../components/elements/Navbar.astro";
+import { profile } from "../data/site";
 
 export interface Props {
-  title: string;
+  title?: string;
+  description?: string;
 }
 
-const { title } = Astro.props;
+const {
+  title = `${profile.name} — Backend & Agentic AI Engineer`,
+  description = profile.tagline,
+} = Astro.props;
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="../images/Net Access Solutions Logo (2).png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content="Ritvik Pendyala | A Budding Develoepr">
-    <title>Ritvik Pendyala | Portfolio</title>
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={profile.name} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#060709" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Raleway:wght@300;400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap"
       rel="stylesheet"
     />
   </head>
-  <body class="overflow-hidden overflow-y-auto bg-body">
+
+  <body class="bg-ink-950 text-zinc-300 antialiased selection:bg-accent/30 selection:text-white">
+    <!-- ambient field -->
+    <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
+      <div class="absolute -top-40 -left-32 h-[36rem] w-[36rem] rounded-full bg-accent/25 blur-[140px] animate-aurora"></div>
+      <div class="absolute top-1/3 -right-40 h-[32rem] w-[32rem] rounded-full bg-cyan-500/15 blur-[140px] animate-aurora [animation-delay:-8s]"></div>
+      <div class="absolute bottom-0 left-1/3 h-[30rem] w-[30rem] rounded-full bg-fuchsia-600/10 blur-[150px] animate-aurora [animation-delay:-15s]"></div>
+      <div class="grid-field absolute inset-0"></div>
+      <div class="grain absolute inset-0"></div>
+    </div>
+
+    <!-- cursor spotlight -->
+    <div id="spotlight" aria-hidden="true" class="pointer-events-none fixed -z-10 h-[30rem] w-[30rem] rounded-full opacity-0 transition-opacity duration-500"></div>
+
+    <div id="scroll-progress" class="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left scale-x-0 bg-gradient-to-r from-accent via-cyan-glow to-fuchsia-400"></div>
+
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-white">Skip to content</a>
+
+    <noscript>
+      <style>
+        [data-reveal] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      </style>
+    </noscript>
+
     <Navbar />
-    <slot />
+    <main id="main" class="relative">
+      <slot />
+    </main>
     <Footer />
-  </body>
-  <script>
-    const toggleMenu = document.querySelector(
-      "[data-toggle-nav]"
-    ) as HTMLButtonElement;
-    const navbar = document.querySelector("[data-navbar]") as HTMLDivElement;
-    const overlayNav = document.querySelector(
-      "[data-nav-overlay]"
-    ) as HTMLDivElement;
-    if (toggleMenu) {
-      toggleMenu.addEventListener("click", (e) => {
-        e.preventDefault();
-        if (toggleMenu.getAttribute("data-open-nav") === "false") {
-          toggleMenu.setAttribute("data-open-nav", "true");
-          overlayNav.setAttribute("data-is-visible", "true");
-          document.body.classList.add("!overflow-y-hidden");
-		  navbar.style.height = `${navbar.scrollHeight}px`
 
-        }else{
-			toggleMenu.setAttribute("data-open-nav", "false");
-        	overlayNav.setAttribute("data-is-visible", "false");
-        	document.body.classList.remove("!overflow-y-hidden");
-		  	navbar.style.height = "0px"
-		}
-		
-        
-      });
+    <style is:global>
+      html {
+        scroll-behavior: smooth;
+        scroll-padding-top: 6rem;
+        -webkit-font-smoothing: antialiased;
+      }
 
-      overlayNav.addEventListener("click", (e) => {
-        e.preventDefault();
+      body {
+        font-family: "Inter", system-ui, sans-serif;
+        overflow-x: hidden;
+      }
+
+      .font-display {
+        font-family: "Instrument Serif", Georgia, serif;
+        font-weight: 400;
+      }
+
+      .font-mono {
+        font-family: "JetBrains Mono", ui-monospace, monospace;
+      }
+
+      /* faint engineering grid */
+      .grid-field {
+        background-image: linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+        background-size: 72px 72px;
+        mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 30%, transparent 78%);
+        -webkit-mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 30%, transparent 78%);
+      }
+
+      .grain {
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      }
+
+      #spotlight {
+        background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 62%);
+        transform: translate(-50%, -50%);
+      }
+
+      /* scroll reveal */
+      [data-reveal] {
+        opacity: 0;
+        transform: translateY(26px);
+        transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+          transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      [data-reveal].is-visible {
+        opacity: 1;
+        transform: none;
+      }
+
+      /* gradient border card */
+      .edge-card {
+        position: relative;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(12px);
+      }
+      .edge-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        padding: 1px;
+        background: linear-gradient(140deg, rgba(129, 140, 248, 0.55), transparent 42%, transparent 62%, rgba(34, 211, 238, 0.35));
+        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        -webkit-mask-composite: xor;
+        mask-composite: exclude;
+        opacity: 0;
+        transition: opacity 0.45s ease;
+        pointer-events: none;
+      }
+      .edge-card:hover::before {
+        opacity: 1;
+      }
+
+      /* section heading rule */
+      .rule {
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.16), transparent);
+      }
+
+      .marquee-mask {
+        mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+        -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+      }
+
+      .link-underline {
+        background-image: linear-gradient(currentColor, currentColor);
+        background-size: 0% 1px;
+        background-repeat: no-repeat;
+        background-position: 0 100%;
+        transition: background-size 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .link-underline:hover {
+        background-size: 100% 1px;
+      }
+
+      [data-toggle-nav][data-open-nav="true"] #line1 {
+        transform: translateY(0.375rem) rotate(45deg);
+      }
+      [data-toggle-nav][data-open-nav="true"] #line2 {
+        transform: scaleX(0);
+        opacity: 0;
+      }
+      [data-toggle-nav][data-open-nav="true"] #line3 {
+        transform: translateY(-0.375rem) rotate(-45deg);
+      }
+
+      ::-webkit-scrollbar {
+        width: 10px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #060709;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #272b36;
+        border-radius: 99px;
+        border: 3px solid #060709;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #3f4454;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-behavior: auto;
+        }
+        *,
+        *::before,
+        *::after {
+          animation-duration: 0.01ms !important;
+          animation-iteration-count: 1 !important;
+          transition-duration: 0.01ms !important;
+        }
+        [data-reveal] {
+          opacity: 1;
+          transform: none;
+        }
+      }
+    </style>
+
+    <script>
+      // --- scroll reveal ---
+      const revealables = document.querySelectorAll("[data-reveal]");
+      const revealObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target as HTMLElement;
+            const delay = Number(el.dataset.revealDelay ?? 0);
+            window.setTimeout(() => el.classList.add("is-visible"), delay);
+            revealObserver.unobserve(el);
+          });
+        },
+        { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+      );
+      revealables.forEach((el) => revealObserver.observe(el));
+
+      // Safety net: never leave content stuck at opacity 0 if the observer
+      // misfires (backgrounded tab, odd viewport, script error upstream).
+      window.setTimeout(() => {
+        document
+          .querySelectorAll("[data-reveal]:not(.is-visible)")
+          .forEach((el) => {
+            const r = el.getBoundingClientRect();
+            if (r.top < window.innerHeight && r.bottom > 0) el.classList.add("is-visible");
+          });
+      }, 2000);
+
+      // --- scroll progress ---
+      const progress = document.getElementById("scroll-progress");
+      const header = document.querySelector("[data-header]") as HTMLElement | null;
+      const onScroll = () => {
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const ratio = max > 0 ? window.scrollY / max : 0;
+        if (progress) progress.style.transform = `scaleX(${ratio})`;
+        if (header) header.dataset.scrolled = window.scrollY > 24 ? "true" : "false";
+      };
+      onScroll();
+      window.addEventListener("scroll", onScroll, { passive: true });
+
+      // --- scroll spy ---
+      const sections = Array.from(document.querySelectorAll("section[id]"));
+      const navLinks = Array.from(
+        document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]")
+      );
+      const spy = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting) return;
+            const id = entry.target.id;
+            navLinks.forEach((link) => {
+              link.dataset.active =
+                link.getAttribute("href") === `#${id}` ? "true" : "false";
+            });
+          });
+        },
+        { rootMargin: "-45% 0px -50% 0px" }
+      );
+      sections.forEach((s) => spy.observe(s));
+
+      // --- cursor spotlight (pointer devices only) ---
+      const spotlight = document.getElementById("spotlight");
+      if (spotlight && window.matchMedia("(pointer: fine)").matches) {
+        let raf = 0;
+        window.addEventListener("pointermove", (e) => {
+          if (raf) return;
+          raf = window.requestAnimationFrame(() => {
+            spotlight.style.left = `${e.clientX}px`;
+            spotlight.style.top = `${e.clientY}px`;
+            spotlight.style.opacity = "1";
+            raf = 0;
+          });
+        });
+      }
+
+      // --- mobile nav ---
+      const toggleMenu = document.querySelector("[data-toggle-nav]") as HTMLButtonElement | null;
+      const navbar = document.querySelector("[data-navbar]") as HTMLDivElement | null;
+      const overlayNav = document.querySelector("[data-nav-overlay]") as HTMLDivElement | null;
+
+      const closeNav = () => {
+        if (!toggleMenu || !navbar || !overlayNav) return;
         toggleMenu.setAttribute("data-open-nav", "false");
-        	overlayNav.setAttribute("data-is-visible", "false");
-        	document.body.classList.remove("!overflow-y-hidden");
-		  	navbar.style.height = "0px"
-      });
-    }
-  </script>
+        overlayNav.setAttribute("data-is-visible", "false");
+        document.body.classList.remove("!overflow-y-hidden");
+        navbar.style.height = "0px";
+      };
+
+      if (toggleMenu && navbar && overlayNav) {
+        toggleMenu.addEventListener("click", (e) => {
+          e.preventDefault();
+          if (toggleMenu.getAttribute("data-open-nav") === "false") {
+            toggleMenu.setAttribute("data-open-nav", "true");
+            overlayNav.setAttribute("data-is-visible", "true");
+            document.body.classList.add("!overflow-y-hidden");
+            navbar.style.height = `${navbar.scrollHeight}px`;
+          } else {
+            closeNav();
+          }
+        });
+        overlayNav.addEventListener("click", closeNav);
+        navbar.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeNav));
+      }
+
+      // --- footer year ---
+      const year = document.getElementById("year");
+      if (year) year.textContent = String(new Date().getFullYear());
+    </script>
+  </body>
 </html>
-<style is:global>
-  :root {
-    --color-bg: 0 0 0;
-    --color-border: 255 255 255;
-    --color-box: 255 255 255;
-    --box-border: 229 231 235;
-    --box-sd: 226 232 240 / 0.5;
-	--heading-1:  23 37 84;
-	--heading-2: 31 41 55;
-	--heading-3: 55 65 81;
-  }
-
-  .dark {
-    --color-bg: 3 7 18;
-    --color-box: 17 24 39;
-    --box-border: 243 244 246/0.1;
-    --box-sd: transparent;
-
-	
-	--heading-1:  255 255 255;
-	--heading-2:  243 244 246;
-	--heading-3:  209 213 219;
-  }
-
-  html{
-    scroll-behavior: smooth;
-  }
-  body {
-    font-family: "Raleway", sans-serif;
-  }
-
-  [data-toggle-nav][data-open-nav="true"] #line1 {
-    transform: translateY(0.375rem) rotate(40deg);
-  }
-  [data-toggle-nav][data-open-nav="true"] #line2 {
-    transform: scaleX(0);
-    opacity: 0;
-  }
-  [data-toggle-nav][data-open-nav="true"] #line3 {
-    transform: translateY(-0.375rem) rotate(-40deg);
-  }
-
-  
-  [data-nav-overlay][data-is-visible="true"] {
-    visibility: visible;
-    display: flex;
-  }
-</style>

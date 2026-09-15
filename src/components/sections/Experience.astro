@@ -1,0 +1,104 @@
+---
+import Container from "../shared/Container.astro";
+import SectionHeading from "../shared/SectionHeading.astro";
+import { experience } from "../../data/site";
+---
+
+<section id="experience" class="relative scroll-mt-24 py-24 lg:py-32">
+  <Container>
+    <SectionHeading
+      index="02"
+      eyebrow="Experience"
+      title="Four years of <em class='font-display italic text-accent-soft'>shipping</em>."
+      lede="From a first internship writing REST endpoints to architecting the agent layer of an enterprise test platform."
+    />
+
+    <div class="relative">
+      <!-- spine -->
+      <div
+        aria-hidden="true"
+        class="absolute left-[7px] top-2 hidden h-full w-px bg-gradient-to-b from-accent/60 via-white/10 to-transparent sm:block"
+      ></div>
+
+      <div class="space-y-5">
+        {
+          experience.map((job, i) => (
+            <article
+              data-reveal
+              data-reveal-delay={i * 70}
+              class="relative sm:pl-12"
+            >
+              <span
+                aria-hidden="true"
+                class="absolute left-0 top-8 hidden h-[15px] w-[15px] rounded-full border-2 border-ink-950 bg-accent sm:block"
+              >
+                <span class="absolute inset-0 rounded-full bg-accent/60 blur-[6px]"></span>
+              </span>
+
+              <details class="edge-card group overflow-hidden rounded-2xl" open={i === 0}>
+                <summary class="flex cursor-pointer list-none items-start gap-5 p-6 transition-colors duration-300 hover:bg-white/[0.02] sm:p-7">
+                  <div class="min-w-0 flex-1">
+                    <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+                      <h3 class="text-xl font-medium tracking-tight text-white sm:text-2xl">
+                        {job.role}
+                      </h3>
+                      <span class="rounded-full border border-white/10 bg-white/[0.04] px-2.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-zinc-500">
+                        {job.span}
+                      </span>
+                    </div>
+
+                    <div class="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm">
+                      <span class="text-accent-soft">{job.company}</span>
+                      <span class="text-zinc-700">·</span>
+                      <span class="text-zinc-500">{job.team}</span>
+                      <span class="text-zinc-700">·</span>
+                      <span class="font-mono text-[12px] text-zinc-500">{job.period}</span>
+                    </div>
+
+                    <p class="mt-4 max-w-2xl text-[15px] leading-relaxed text-zinc-400">
+                      {job.summary}
+                    </p>
+
+                    <div class="mt-5 flex flex-wrap gap-1.5">
+                      {job.stack.map((t) => (
+                        <span class="rounded-md border border-white/[0.07] bg-white/[0.03] px-2 py-1 font-mono text-[10.5px] text-zinc-500">
+                          {t}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <span class="mt-1 grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/10 text-zinc-500 transition-all duration-300 group-hover:border-accent/40 group-hover:text-white group-open:rotate-180">
+                    <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="m4 6 4 4 4-4" />
+                    </svg>
+                  </span>
+                </summary>
+
+                <div class="border-t border-white/[0.07] px-6 pb-7 pt-6 sm:px-7">
+                  <ul class="space-y-5">
+                    {job.highlights.map((h) => (
+                      <li class="group/item relative pl-6">
+                        <span class="absolute left-0 top-[9px] h-1.5 w-1.5 rounded-full bg-accent/70 transition-colors duration-300 group-hover/item:bg-cyan-glow"></span>
+                        <h4 class="text-[15px] font-medium text-zinc-100">{h.title}</h4>
+                        <p class="mt-1.5 max-w-3xl text-[14.5px] leading-relaxed text-zinc-500">
+                          {h.body}
+                        </p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </details>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </Container>
+</section>
+
+<style>
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+</style>

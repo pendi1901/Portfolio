@@ -1,55 +1,90 @@
 ---
-import BtnLink from "../shared/BtnLink.astro";
 import Container from "../shared/Container.astro";
-import  Navitem from "../shared/Navitem.astro";
+import { profile } from "../../data/site";
 
 const navItems = [
-    {
-        href:"#",
-        text:"Home"
-    },
-    {
-        href:"#features",
-        text:"About"
-    },
-    {
-        href:"#about-us",
-        text:"Experiences"
-    },
-    {
-        href:"#services",
-        text:"Projects"
-    },
-    
-
-]
+  { href: "/#about", text: "About" },
+  { href: "/#experience", text: "Experience" },
+  { href: "/#projects", text: "Projects" },
+  { href: "/#skills", text: "Skills" },
+  { href: "/#beyond", text: "Beyond" },
+];
 ---
 
-<header class="absolute inset-x-0 top-0 z-50 py-6" style="position:fixed ; backdrop-filter: blur(50px); ">
-    <Container>
-        <nav class="w-full flex justify-between gap-6 relative ">
-            <!-- logo -->
-            <div class="min-w-max inline-flex relative">
-                <a href="#" class="relative flex items-center gap-3">
-                    <div class="inline-flex text-3xl font-semibold text-heading-1" style="color: aliceblue;">
-                        Ritvik Pendyala
-                    </div>
+<header
+  data-header
+  data-scrolled="false"
+  class="fixed inset-x-0 top-0 z-50 py-4 transition-all duration-500 data-[scrolled=true]:border-b data-[scrolled=true]:border-white/[0.07] data-[scrolled=true]:bg-ink-950/70 data-[scrolled=true]:py-3 data-[scrolled=true]:backdrop-blur-xl"
+>
+  <Container>
+    <nav class="relative flex w-full items-center justify-between gap-6">
+      <a href="/" class="group relative z-10 flex items-center gap-3">
+        <span class="relative grid h-9 w-9 place-items-center overflow-hidden rounded-xl bg-gradient-to-br from-accent to-cyan-glow font-mono text-sm font-semibold text-white">
+          RP
+        </span>
+        <span class="hidden font-medium tracking-tight text-white sm:block">
+          {profile.name}
+        </span>
+      </a>
+
+      <button
+        data-toggle-nav
+        data-open-nav="false"
+        aria-label="Toggle navigation"
+        class="relative z-10 flex h-10 w-10 flex-col items-center justify-center gap-1.5 rounded-xl border border-white/10 bg-white/[0.03] lg:hidden"
+      >
+        <span id="line1" class="h-px w-4 bg-zinc-300 transition-transform duration-300"></span>
+        <span id="line2" class="h-px w-4 bg-zinc-300 transition-all duration-300"></span>
+        <span id="line3" class="h-px w-4 bg-zinc-300 transition-transform duration-300"></span>
+      </button>
+
+      <div
+        data-nav-overlay
+        aria-hidden="true"
+        class="fixed inset-0 hidden bg-ink-950/60 backdrop-blur-sm lg:!hidden"
+      ></div>
+
+      <div
+        data-navbar
+        class="absolute top-full flex h-0 w-full flex-col gap-y-6 overflow-hidden rounded-2xl border-white/10 bg-ink-900/95 backdrop-blur-xl duration-300 ease-linear lg:relative lg:top-0 lg:!h-auto lg:w-max lg:flex-row lg:items-center lg:gap-x-2 lg:rounded-none lg:border-0 lg:bg-transparent lg:backdrop-blur-none"
+      >
+        <ul class="flex flex-col gap-1 px-4 pt-5 text-sm lg:flex-row lg:items-center lg:gap-1 lg:px-0 lg:pt-0">
+          {
+            navItems.map((item) => (
+              <li>
+                <a
+                  href={item.href}
+                  data-nav-link
+                  data-active="false"
+                  class="block rounded-lg px-3.5 py-2 text-zinc-400 transition-colors duration-300 hover:text-white data-[active=true]:bg-white/[0.06] data-[active=true]:text-white"
+                >
+                  {item.text}
                 </a>
-            </div>
+              </li>
+            ))
+          }
+        </ul>
 
-            <div data-nav-overlay aria-hidden="true" class="fixed hidden inset-0 lg:!hidden bg-box-bg bg-opacity-50 backdrop-filter backdrop-blur-xl"></div>
-            <div data-navbar class="flex h-0 overflow-hidden lg:!h-auto lg:scale-y-100 duration-300 ease-linear flex-col gap-y-6 gap-x-4 lg:flex-row w-full lg:justify-between lg:items-center absolute lg:relative top-full lg:top-0 bg-body lg:bg-transparent border-x border-x-box-border lg:border-x-0">
-                <ul class="border-t border-box-border lg:border-t-0 px-6 lg:px-0 pt-6 lg:pt-0 flex flex-col lg:flex-row gap-y-4 gap-x-10 text-lg text-heading-2 w-full lg:justify-center lg:items-center " style="color: aliceblue;">
-                    {navItems.map(item=>{
-                        return <Navitem {...item}/>
-                    })
-                    }
-                </ul>
-
-                <div class="lg:min-w-max flex items-center sm:w-max w-full pb-6 lg:pb-0 border-b border-box-bg lg:border-0 px-6 lg:px-0">
-                    <BtnLink text="Get In Touch" href="#cta" className="flex justify-center w-full sm:w-max" variant="primary"/>
-                </div>
-            </div>
-        </nav>
-    </Container>
+        <div class="flex items-center gap-3 px-4 pb-5 lg:px-0 lg:pb-0 lg:pl-3">
+          <a
+            href={profile.resume}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hidden rounded-lg px-3.5 py-2 text-sm text-zinc-400 transition-colors duration-300 hover:text-white lg:block"
+          >
+            Résumé
+          </a>
+          <a
+            href="/#contact"
+            class="group relative inline-flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-white px-5 py-2.5 text-sm font-medium text-ink-950 transition-transform duration-300 hover:scale-[1.03] lg:w-max"
+          >
+            <span class="relative z-10">Get in touch</span>
+            <svg class="relative z-10 h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 8h10M9 4l4 4-4 4" />
+            </svg>
+          </a>
+        </div>
+      </div>
+    </nav>
+  </Container>
 </header>

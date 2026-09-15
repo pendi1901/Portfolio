@@ -1,0 +1,319 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Container from "../../components/shared/Container.astro";
+import ProjectCover from "../../components/shared/ProjectCover.astro";
+import { projects, profile } from "../../data/site";
+
+export async function getStaticPaths() {
+  return projects.map((project, i) => ({
+    params: { slug: project.slug },
+    props: {
+      project,
+      prev: projects[(i - 1 + projects.length) % projects.length],
+      next: projects[(i + 1) % projects.length],
+    },
+  }));
+}
+
+const { project, prev, next } = Astro.props;
+---
+
+<Layout
+  title={`${project.name} — ${profile.name}`}
+  description={project.blurb}
+>
+  <article class="relative pb-24">
+    <!-- header -->
+    <section class="relative pt-32 sm:pt-36 lg:pt-40">
+      <Container>
+        <a
+          href="/#projects"
+          class="group inline-flex items-center gap-2 font-mono text-[11.5px] uppercase tracking-[0.18em] text-zinc-500 transition-colors hover:text-white"
+          data-reveal
+        >
+          <svg class="h-3 w-3 transition-transform duration-300 group-hover:-translate-x-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M13 8H3M7 4 3 8l4 4" />
+          </svg>
+          All projects
+        </a>
+
+        <div class="mt-10 grid gap-12 lg:grid-cols-12 lg:gap-14">
+          <div class="lg:col-span-7">
+            <div data-reveal class="flex flex-wrap items-center gap-3">
+              <span class={`h-1.5 w-12 rounded-full bg-gradient-to-r ${project.accent}`}></span>
+              <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500">
+                {project.category}
+              </span>
+              <span class="text-zinc-700">·</span>
+              <span class="font-mono text-[11px] uppercase tracking-[0.18em] text-zinc-500">
+                {project.period}
+              </span>
+            </div>
+
+            <h1
+              data-reveal
+              data-reveal-delay="60"
+              class="mt-6 font-display text-[clamp(2.75rem,7vw,5rem)] leading-[0.98] tracking-tightest text-white"
+            >
+              {project.name}
+            </h1>
+
+            <p data-reveal data-reveal-delay="120" class="mt-6 max-w-2xl text-lg leading-relaxed text-zinc-400">
+              {project.blurb}
+            </p>
+
+            {
+              project.links.length > 0 && (
+                <div data-reveal data-reveal-delay="180" class="mt-9 flex flex-wrap items-center gap-3">
+                  {project.links.map((l, i) => (
+                    <a
+                      href={l.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class={
+                        i === 0
+                          ? "group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-medium text-ink-950 transition-transform duration-300 hover:scale-[1.03]"
+                          : "group inline-flex items-center gap-2 rounded-full border border-white/12 px-6 py-3 text-sm font-medium text-zinc-200 transition-all duration-300 hover:border-accent/50 hover:bg-accent/10 hover:text-white"
+                      }
+                    >
+                      {l.label}
+                      <svg class="h-3 w-3 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 11 11 5M6 5h5v5" />
+                      </svg>
+                    </a>
+                  ))}
+                </div>
+              )
+            }
+          </div>
+
+          <!-- meta panel -->
+          <aside class="lg:col-span-5">
+            <div data-reveal data-reveal-delay="140" class="edge-card rounded-2xl p-7">
+              <dl class="space-y-5">
+                <div>
+                  <dt class="font-mono text-[10.5px] uppercase tracking-[0.18em] text-zinc-600">Role</dt>
+                  <dd class="mt-1.5 text-[15px] text-zinc-200">{project.role}</dd>
+                </div>
+                <div>
+                  <dt class="font-mono text-[10.5px] uppercase tracking-[0.18em] text-zinc-600">Context</dt>
+                  <dd class="mt-1.5 text-[15px] text-zinc-200">{project.context}</dd>
+                </div>
+                {
+                  project.team && (
+                    <div>
+                      <dt class="font-mono text-[10.5px] uppercase tracking-[0.18em] text-zinc-600">
+                        Built with
+                      </dt>
+                      <dd class="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1 text-[15px] text-zinc-200">
+                        {project.team.map((m, i) => (
+                          <>
+                            {i > 0 && <span class="text-zinc-700">·</span>}
+                            {m.href ? (
+                              <a
+                                href={m.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="link-underline text-accent-soft"
+                              >
+                                {m.name}
+                              </a>
+                            ) : (
+                              <span>{m.name}</span>
+                            )}
+                          </>
+                        ))}
+                      </dd>
+                    </div>
+                  )
+                }
+                {
+                  project.advisor && (
+                    <div>
+                      <dt class="font-mono text-[10.5px] uppercase tracking-[0.18em] text-zinc-600">Advisor</dt>
+                      <dd class="mt-1.5 text-[15px]">
+                        {project.advisor.href ? (
+                          <a
+                            href={project.advisor.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="link-underline text-accent-soft"
+                          >
+                            {project.advisor.name}
+                          </a>
+                        ) : (
+                          <span class="text-zinc-200">{project.advisor.name}</span>
+                        )}
+                      </dd>
+                    </div>
+                  )
+                }
+                <div>
+                  <dt class="font-mono text-[10.5px] uppercase tracking-[0.18em] text-zinc-600">Stack</dt>
+                  <dd class="mt-2.5 flex flex-wrap gap-1.5">
+                    {
+                      project.tags.map((t) => (
+                        <span class="rounded-md border border-white/[0.07] bg-white/[0.03] px-2 py-1 font-mono text-[10.5px] text-zinc-400">
+                          {t}
+                        </span>
+                      ))
+                    }
+                  </dd>
+                </div>
+              </dl>
+            </div>
+          </aside>
+        </div>
+      </Container>
+    </section>
+
+    <!-- cover -->
+    {
+      project.cover && (
+        <section class="mt-16 lg:mt-20">
+          <Container>
+            <div
+              data-reveal
+              class="mx-auto max-w-3xl overflow-hidden rounded-3xl border border-white/[0.07]"
+            >
+              <ProjectCover
+                project={project}
+                className="aspect-[7/5]"
+                eager
+                sizes="(min-width: 768px) 768px, 100vw"
+              />
+            </div>
+          </Container>
+        </section>
+      )
+    }
+
+    <!-- body -->
+    <section class={project.cover ? "mt-20 lg:mt-24" : "mt-16"}>
+      <Container>
+        <div class="grid gap-14 lg:grid-cols-12 lg:gap-16">
+          <div class="lg:col-span-7">
+            <div data-reveal class="mb-6 flex items-center gap-4">
+              <span class="font-mono text-xs uppercase tracking-[0.22em] text-zinc-500">Overview</span>
+              <span class="rule h-px flex-1"></span>
+            </div>
+            <div class="space-y-5 text-[17px] leading-relaxed text-zinc-400" data-reveal data-reveal-delay="60">
+              {project.overview.map((p) => <p>{p}</p>)}
+            </div>
+
+            <div data-reveal class="mb-6 mt-16 flex items-center gap-4">
+              <span class="font-mono text-xs uppercase tracking-[0.22em] text-zinc-500">
+                {project.team ? "What we built" : "What I built"}
+              </span>
+              <span class="rule h-px flex-1"></span>
+            </div>
+            <ul class="space-y-8">
+              {
+                project.highlights.map((h, i) => (
+                  <li data-reveal data-reveal-delay={i * 60} class="group relative pl-7">
+                    <span class="absolute left-0 top-[10px] h-1.5 w-1.5 rounded-full bg-accent/70 transition-colors duration-300 group-hover:bg-cyan-glow" />
+                    <h3 class="text-[17px] font-medium text-zinc-100">{h.title}</h3>
+                    <p class="mt-2 text-[15.5px] leading-relaxed text-zinc-500">{h.body}</p>
+                  </li>
+                ))
+              }
+            </ul>
+          </div>
+
+          <!-- results + stack detail -->
+          <aside class="lg:col-span-5 space-y-5">
+            {
+              project.results && (
+                <div data-reveal class="edge-card rounded-2xl p-7">
+                  <h3 class="mb-6 font-mono text-xs uppercase tracking-[0.22em] text-zinc-500">
+                    Results
+                  </h3>
+                  <dl class="space-y-4">
+                    {project.results.map((r) => (
+                      <div class="flex items-baseline justify-between gap-4 border-b border-white/[0.06] pb-4 last:border-0 last:pb-0">
+                        <dt class="text-[14px] leading-snug text-zinc-400">
+                          {r.label}
+                          {r.note && (
+                            <span class="mt-0.5 block font-mono text-[10.5px] uppercase tracking-wider text-zinc-600">
+                              {r.note}
+                            </span>
+                          )}
+                        </dt>
+                        <dd class="shrink-0 font-display text-2xl text-white">{r.value}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              )
+            }
+            {
+              project.stackDetail && (
+                <div data-reveal class="edge-card rounded-2xl p-7">
+                  <h3 class="mb-6 font-mono text-xs uppercase tracking-[0.22em] text-zinc-500">
+                    Under the hood
+                  </h3>
+                  <div class="space-y-6">
+                    {project.stackDetail.map((g) => (
+                      <div>
+                        <div class="mb-3 flex items-center gap-3">
+                          <span class="font-mono text-[10.5px] uppercase tracking-[0.18em] text-accent-soft/80">
+                            {g.label}
+                          </span>
+                          <span class="rule h-px flex-1" />
+                        </div>
+                        <div class="flex flex-wrap gap-1.5">
+                          {g.items.map((item) => (
+                            <span class="rounded-lg border border-white/[0.07] bg-white/[0.03] px-2.5 py-1 text-[12.5px] text-zinc-400">
+                              {item}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )
+            }
+          </aside>
+        </div>
+      </Container>
+    </section>
+
+    <!-- prev / next -->
+    <section class="mt-24">
+      <Container>
+        <div class="grid gap-4 border-t border-white/[0.07] pt-10 sm:grid-cols-2">
+          <a
+            href={`/projects/${prev.slug}`}
+            data-reveal
+            class="edge-card group rounded-2xl p-6 transition-transform duration-500 hover:-translate-y-1"
+          >
+            <span class="font-mono text-[10.5px] uppercase tracking-[0.18em] text-zinc-600">
+              Previous
+            </span>
+            <div class="mt-2.5 flex items-center gap-2 text-lg text-white">
+              <svg class="h-3.5 w-3.5 shrink-0 text-zinc-500 transition-transform duration-300 group-hover:-translate-x-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 8H3M7 4 3 8l4 4" />
+              </svg>
+              {prev.name}
+            </div>
+          </a>
+          <a
+            href={`/projects/${next.slug}`}
+            data-reveal
+            data-reveal-delay="60"
+            class="edge-card group rounded-2xl p-6 text-right transition-transform duration-500 hover:-translate-y-1"
+          >
+            <span class="font-mono text-[10.5px] uppercase tracking-[0.18em] text-zinc-600">Next</span>
+            <div class="mt-2.5 flex items-center justify-end gap-2 text-lg text-white">
+              {next.name}
+              <svg class="h-3.5 w-3.5 shrink-0 text-zinc-500 transition-transform duration-300 group-hover:translate-x-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 8h10M9 4l4 4-4 4" />
+              </svg>
+            </div>
+          </a>
+        </div>
+      </Container>
+    </section>
+  </article>
+</Layout>

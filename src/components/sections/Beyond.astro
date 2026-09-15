@@ -1,0 +1,98 @@
+---
+import Container from "../shared/Container.astro";
+import SectionHeading from "../shared/SectionHeading.astro";
+import { achievements, interests } from "../../data/site";
+---
+
+<section id="beyond" class="relative scroll-mt-24 py-24 lg:py-32">
+  <Container>
+    <SectionHeading
+      index="05"
+      eyebrow="Beyond the code"
+      title="Research, <em class='font-display italic text-accent-soft'>chess</em>, and the rest."
+      lede="A peer-reviewed publication, a FIDE title, and the hobbies that keep feeding back into the work."
+    />
+
+    <div class="grid gap-5 lg:grid-cols-2">
+      {
+        achievements.map((a, i) => {
+          const Tag = a.href ? "a" : "div";
+          return (
+            <Tag
+              {...(a.href ? { href: a.href, target: "_blank", rel: "noopener noreferrer" } : {})}
+              data-reveal
+              data-reveal-delay={i * 90}
+              class="edge-card group relative block overflow-hidden rounded-3xl p-8 transition-transform duration-500 hover:-translate-y-1.5"
+            >
+              <div
+                aria-hidden="true"
+                class={`absolute -right-20 -top-20 h-48 w-48 rounded-full blur-3xl transition-opacity duration-700 group-hover:opacity-40 ${
+                  a.kind === "Chess" ? "bg-amber-glow/20" : "bg-accent/25"
+                } opacity-20`}
+              />
+
+              <div class="relative flex items-center gap-3">
+                <span
+                  class={`grid h-10 w-10 place-items-center rounded-xl border ${
+                    a.kind === "Chess"
+                      ? "border-amber-glow/25 bg-amber-glow/10 text-amber-glow"
+                      : "border-accent/25 bg-accent/10 text-accent-soft"
+                  }`}
+                >
+                  {a.kind === "Chess" ? (
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2a3 3 0 0 0-2.4 4.8L8 9h2l-.6 2.4A5 5 0 0 0 7 16v1h10v-1a5 5 0 0 0-2.4-4.6L14 9h2l-1.6-2.2A3 3 0 0 0 12 2ZM6 19h12v3H6v-3Z" />
+                    </svg>
+                  ) : (
+                    <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                      <path d="M5 3h10l4 4v14H5z" />
+                      <path d="M15 3v4h4M8 12h8M8 16h5" />
+                    </svg>
+                  )}
+                </span>
+                <span class="font-mono text-[11px] uppercase tracking-[0.2em] text-zinc-500">
+                  {a.kind}
+                </span>
+              </div>
+
+              <h3 class="relative mt-6 font-display text-3xl leading-tight text-white">
+                {a.title}
+              </h3>
+              <p class="relative mt-4 text-[14.5px] leading-relaxed text-zinc-400">{a.body}</p>
+
+              <div class="relative mt-6 flex items-center justify-between gap-4 border-t border-white/[0.07] pt-5">
+                <span class="font-mono text-[11px] text-zinc-600">{a.meta}</span>
+                {a.href && (
+                  <span class="inline-flex items-center gap-1.5 text-[13px] text-zinc-400 transition-colors group-hover:text-white">
+                    FIDE profile
+                    <svg class="h-3 w-3 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M5 11 11 5M6 5h5v5" />
+                    </svg>
+                  </span>
+                )}
+              </div>
+            </Tag>
+          );
+        })
+      }
+    </div>
+
+    <!-- interests -->
+    <div class="mt-5 grid gap-px overflow-hidden rounded-2xl border border-white/[0.07] bg-white/[0.05] sm:grid-cols-3">
+      {
+        interests.map((it, i) => (
+          <div
+            data-reveal
+            data-reveal-delay={i * 70}
+            class="group bg-ink-950/80 p-7 transition-colors duration-300 hover:bg-ink-900"
+          >
+            <h4 class="text-[15px] font-medium text-white transition-colors group-hover:text-accent-soft">
+              {it.title}
+            </h4>
+            <p class="mt-2.5 text-[13.5px] leading-relaxed text-zinc-500">{it.body}</p>
+          </div>
+        ))
+      }
+    </div>
+  </Container>
+</section>

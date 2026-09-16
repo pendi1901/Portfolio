@@ -1,6 +1,7 @@
 ---
 import Footer from "../components/elements/Footer.astro";
 import Navbar from "../components/elements/Navbar.astro";
+import Analytics from "@vercel/analytics/astro";
 import { profile } from "../data/site";
 
 export interface Props {
@@ -93,7 +94,10 @@ const personSchema = {
     <meta name="description" content={description} />
     <meta name="author" content={profile.name} />
     <link rel="canonical" href={canonical.href} />
-    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
 
     <meta property="og:type" content={type} />
     <meta property="og:site_name" content={profile.name} />
@@ -101,7 +105,10 @@ const personSchema = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical.href} />
     <meta property="og:image" content={ogImage.href} />
-    <meta property="og:image:alt" content={`${profile.name} — ${description}`} />
+    <meta
+      property="og:image:alt"
+      content={`${profile.name} — ${description}`}
+    />
     <meta property="og:locale" content="en_US" />
 
     <meta name="twitter:card" content="summary_large_image" />
@@ -112,8 +119,13 @@ const personSchema = {
 
     <meta name="theme-color" content="#060709" />
 
-    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
-    {schema && <script type="application/ld+json" set:html={JSON.stringify(schema)} />}
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)}
+    ></script>
+    {
+      schema && (
+        <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+      )
+    }
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -123,22 +135,49 @@ const personSchema = {
     />
   </head>
 
-  <body class="bg-ink-950 text-zinc-300 antialiased selection:bg-accent/30 selection:text-white">
+  <body
+    class="bg-ink-950 text-zinc-300 antialiased selection:bg-accent/30 selection:text-white"
+  >
     <!-- ambient field -->
-    <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
-      <div class="absolute -top-40 -left-32 h-[36rem] w-[36rem] rounded-full bg-accent/25 blur-[140px] animate-aurora"></div>
-      <div class="absolute top-1/3 -right-40 h-[32rem] w-[32rem] rounded-full bg-cyan-500/15 blur-[140px] animate-aurora [animation-delay:-8s]"></div>
-      <div class="absolute bottom-0 left-1/3 h-[30rem] w-[30rem] rounded-full bg-fuchsia-600/10 blur-[150px] animate-aurora [animation-delay:-15s]"></div>
+    <div
+      aria-hidden="true"
+      class="pointer-events-none fixed inset-0 -z-10 overflow-hidden"
+    >
+      <div
+        class="absolute -top-40 -left-32 h-[36rem] w-[36rem] rounded-full bg-accent/25 blur-[140px] animate-aurora"
+      >
+      </div>
+      <div
+        class="absolute top-1/3 -right-40 h-[32rem] w-[32rem] rounded-full bg-cyan-500/15 blur-[140px] animate-aurora [animation-delay:-8s]"
+      >
+      </div>
+      <div
+        class="absolute bottom-0 left-1/3 h-[30rem] w-[30rem] rounded-full bg-fuchsia-600/10 blur-[150px] animate-aurora [animation-delay:-15s]"
+      >
+      </div>
       <div class="grid-field absolute inset-0"></div>
       <div class="grain absolute inset-0"></div>
     </div>
 
     <!-- cursor spotlight -->
-    <div id="spotlight" aria-hidden="true" class="pointer-events-none fixed -z-10 h-[30rem] w-[30rem] rounded-full opacity-0 transition-opacity duration-500"></div>
+    <div
+      id="spotlight"
+      aria-hidden="true"
+      class="pointer-events-none fixed -z-10 h-[30rem] w-[30rem] rounded-full opacity-0 transition-opacity duration-500"
+    >
+    </div>
 
-    <div id="scroll-progress" class="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left scale-x-0 bg-gradient-to-r from-accent via-cyan-glow to-fuchsia-400"></div>
+    <div
+      id="scroll-progress"
+      class="fixed inset-x-0 top-0 z-[60] h-[2px] origin-left scale-x-0 bg-gradient-to-r from-accent via-cyan-glow to-fuchsia-400"
+    >
+    </div>
 
-    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-white">Skip to content</a>
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[70] focus:rounded-lg focus:bg-accent focus:px-4 focus:py-2 focus:text-white"
+      >Skip to content</a
+    >
 
     <noscript>
       <style>
@@ -154,6 +193,7 @@ const personSchema = {
       <slot />
     </main>
     <Footer />
+    <Analytics />
 
     <style is:global>
       html {
@@ -178,11 +218,26 @@ const personSchema = {
 
       /* faint engineering grid */
       .grid-field {
-        background-image: linear-gradient(rgba(255, 255, 255, 0.028) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+        background-image: linear-gradient(
+            rgba(255, 255, 255, 0.028) 1px,
+            transparent 1px
+          ),
+          linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.028) 1px,
+            transparent 1px
+          );
         background-size: 72px 72px;
-        mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 30%, transparent 78%);
-        -webkit-mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 30%, transparent 78%);
+        mask-image: radial-gradient(
+          ellipse 100% 70% at 50% 0%,
+          #000 30%,
+          transparent 78%
+        );
+        -webkit-mask-image: radial-gradient(
+          ellipse 100% 70% at 50% 0%,
+          #000 30%,
+          transparent 78%
+        );
       }
 
       .grain {
@@ -191,7 +246,11 @@ const personSchema = {
       }
 
       #spotlight {
-        background: radial-gradient(circle, rgba(99, 102, 241, 0.12) 0%, transparent 62%);
+        background: radial-gradient(
+          circle,
+          rgba(99, 102, 241, 0.12) 0%,
+          transparent 62%
+        );
         transform: translate(-50%, -50%);
       }
 
@@ -210,7 +269,11 @@ const personSchema = {
       /* gradient border card */
       .edge-card {
         position: relative;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.045),
+          rgba(255, 255, 255, 0.015)
+        );
         border: 1px solid rgba(255, 255, 255, 0.08);
         backdrop-filter: blur(12px);
       }
@@ -220,8 +283,15 @@ const personSchema = {
         inset: 0;
         border-radius: inherit;
         padding: 1px;
-        background: linear-gradient(140deg, rgba(129, 140, 248, 0.55), transparent 42%, transparent 62%, rgba(34, 211, 238, 0.35));
-        -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+        background: linear-gradient(
+          140deg,
+          rgba(129, 140, 248, 0.55),
+          transparent 42%,
+          transparent 62%,
+          rgba(34, 211, 238, 0.35)
+        );
+        -webkit-mask: linear-gradient(#000 0 0) content-box,
+          linear-gradient(#000 0 0);
         -webkit-mask-composite: xor;
         mask-composite: exclude;
         opacity: 0;
@@ -234,12 +304,28 @@ const personSchema = {
 
       /* section heading rule */
       .rule {
-        background: linear-gradient(90deg, rgba(255, 255, 255, 0.16), transparent);
+        background: linear-gradient(
+          90deg,
+          rgba(255, 255, 255, 0.16),
+          transparent
+        );
       }
 
       .marquee-mask {
-        mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
-        -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+        mask-image: linear-gradient(
+          90deg,
+          transparent,
+          #000 8%,
+          #000 92%,
+          transparent
+        );
+        -webkit-mask-image: linear-gradient(
+          90deg,
+          transparent,
+          #000 8%,
+          #000 92%,
+          transparent
+        );
       }
 
       .link-underline {
@@ -310,7 +396,7 @@ const personSchema = {
             revealObserver.unobserve(el);
           });
         },
-        { threshold: 0.12, rootMargin: "0px 0px -8% 0px" }
+        { threshold: 0.12, rootMargin: "0px 0px -8% 0px" },
       );
       revealables.forEach((el) => revealObserver.observe(el));
 
@@ -321,18 +407,22 @@ const personSchema = {
           .querySelectorAll("[data-reveal]:not(.is-visible)")
           .forEach((el) => {
             const r = el.getBoundingClientRect();
-            if (r.top < window.innerHeight && r.bottom > 0) el.classList.add("is-visible");
+            if (r.top < window.innerHeight && r.bottom > 0)
+              el.classList.add("is-visible");
           });
       }, 2000);
 
       // --- scroll progress ---
       const progress = document.getElementById("scroll-progress");
-      const header = document.querySelector("[data-header]") as HTMLElement | null;
+      const header = document.querySelector(
+        "[data-header]",
+      ) as HTMLElement | null;
       const onScroll = () => {
         const max = document.documentElement.scrollHeight - window.innerHeight;
         const ratio = max > 0 ? window.scrollY / max : 0;
         if (progress) progress.style.transform = `scaleX(${ratio})`;
-        if (header) header.dataset.scrolled = window.scrollY > 24 ? "true" : "false";
+        if (header)
+          header.dataset.scrolled = window.scrollY > 24 ? "true" : "false";
       };
       onScroll();
       window.addEventListener("scroll", onScroll, { passive: true });
@@ -340,7 +430,7 @@ const personSchema = {
       // --- scroll spy ---
       const sections = Array.from(document.querySelectorAll("section[id]"));
       const navLinks = Array.from(
-        document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]")
+        document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]"),
       );
       const spy = new IntersectionObserver(
         (entries) => {
@@ -353,7 +443,7 @@ const personSchema = {
             });
           });
         },
-        { rootMargin: "-45% 0px -50% 0px" }
+        { rootMargin: "-45% 0px -50% 0px" },
       );
       sections.forEach((s) => spy.observe(s));
 
@@ -373,9 +463,15 @@ const personSchema = {
       }
 
       // --- mobile nav ---
-      const toggleMenu = document.querySelector("[data-toggle-nav]") as HTMLButtonElement | null;
-      const navbar = document.querySelector("[data-navbar]") as HTMLDivElement | null;
-      const overlayNav = document.querySelector("[data-nav-overlay]") as HTMLDivElement | null;
+      const toggleMenu = document.querySelector(
+        "[data-toggle-nav]",
+      ) as HTMLButtonElement | null;
+      const navbar = document.querySelector(
+        "[data-navbar]",
+      ) as HTMLDivElement | null;
+      const overlayNav = document.querySelector(
+        "[data-nav-overlay]",
+      ) as HTMLDivElement | null;
 
       const closeNav = () => {
         if (!toggleMenu || !navbar || !overlayNav) return;
@@ -398,7 +494,9 @@ const personSchema = {
           }
         });
         overlayNav.addEventListener("click", closeNav);
-        navbar.querySelectorAll("a").forEach((a) => a.addEventListener("click", closeNav));
+        navbar
+          .querySelectorAll("a")
+          .forEach((a) => a.addEventListener("click", closeNav));
       }
 
       // --- footer year ---
